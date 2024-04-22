@@ -7,6 +7,8 @@ use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\ClinicaController;
 use App\Http\Controllers\ControlMateriaController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,11 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
 });
 
 Route::prefix('alumnos')->group(function () {

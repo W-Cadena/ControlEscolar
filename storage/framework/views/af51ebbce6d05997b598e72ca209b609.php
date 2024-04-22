@@ -56,12 +56,10 @@
                                                 <form action="<?php echo e(route('calificaciones.destroy',$calificacione->id)); ?>" method="POST">
                                                     <a class="btn btn-sm btn-primary " href="<?php echo e(route('calificaciones.show',$calificacione->id)); ?>"><i class="fa fa-fw fa-eye"></i> <?php echo e(__('Show')); ?></a>
                                                     <?php if(auth()->guard()->check()): ?>
-                                                    <?php if(Auth::user()->role->name == 'maestro'): ?>
                                                     <a class="btn btn-sm btn-success" href="<?php echo e(route('calificaciones.edit',$calificacione->id)); ?>"><i class="fa fa-fw fa-edit"></i> <?php echo e(__('Edit')); ?></a>
                                                     <?php echo csrf_field(); ?>
                                                     <?php echo method_field('DELETE'); ?>
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> <?php echo e(__('Delete')); ?></button>
-                                                    <?php endif; ?>
                                                     <?php endif; ?>
                                                 </form>
                                             </td>

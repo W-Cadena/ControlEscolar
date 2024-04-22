@@ -11,6 +11,13 @@ use Illuminate\Http\Request;
  */
 class MaestroController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:maestro-list|maestro-create|maestro-edit|maestro-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:maestro-create', ['only' => ['create','store']]);
+         $this->middleware('permission:maestro-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:maestro-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
  */
 class ControlMateriaController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:control-list|control-create|control-edit|control-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:control-create', ['only' => ['create','store']]);
+         $this->middleware('permission:control-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:control-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

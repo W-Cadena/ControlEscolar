@@ -1,114 +1,89 @@
-<!DOCTYPE html>
-<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
+<html lang="<?php echo e(app()->getLocale()); ?>">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-
-    <title><?php echo e(config('app.name', 'escuela')); ?></title>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css">
- 
+    <title><?php echo e(config('app.name', 'Control Escolar')); ?></title>
     <!-- Scripts -->
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+    <!-- Styles -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/sass/app.scss', 'resources/js/app.js']); ?>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
-    <script src="js/script.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/..">Gestor Escolar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('control-materia.index')); ?>">Control Materias</a>
-                                </li>
-                        <?php if(auth()->guard()->check()): ?>
-                            <?php if(Auth::user()->role->name == 'alumno'): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('calificaciones.index')); ?>">Calificaciones</a>
-                                </li>
-                            <?php elseif(Auth::user()->role->name == 'maestro'): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('materias.index')); ?>">Materias</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('calificaciones.index')); ?>">Calificaciones</a>
-                                </li>
-                            <?php elseif(Auth::user()->role->name == 'secretario'): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('materias.index')); ?>">Materias</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('maestros.index')); ?>">Maestros</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('alumnos.index')); ?>">Alumnos</a>
-                                </li>
-                            <?php elseif(Auth::user()->role->name == 'medico'): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('clinicas.index')); ?>">Clinica</a>
-                                </li>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    </ul>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+            <div class="container">
+                <a class="navbar-brand" href="<?php echo e(url('/')); ?>">
+                    Laravel 9 User Roles and Permissions - Mywebtuts.com
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+    
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto"></ul>
+
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         <?php if(auth()->guard()->guest()): ?>
-                            <?php if(Route::has('login')): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('login')); ?>"><?php echo e(__('Login')); ?></a>
-                                </li>
-                            <?php endif; ?>
+                            <li><a class="nav-link" href="<?php echo e(route('login')); ?>"><?php echo e(__('Login')); ?></a></li>
+                            <li><a class="nav-link" href="<?php echo e(route('register')); ?>"><?php echo e(__('Register')); ?></a></li>
+                        <?php else: ?>
+                        <?php if($user->hasRole('Admin')): ?>
+                            <li><a class="nav-link" href="<?php echo e(route('users.index')); ?>">Manejar Usuarios</a></li>
+                            <li><a class="nav-link" href="<?php echo e(route('roles.index')); ?>">Manejar Roles</a></li>
+                        <?php elseif($user->hasRole('maestro')): ?>
+                        <li><a class="nav-link" href="<?php echo e(route('alumnos.index')); ?>">Alumnos</a></li>
+                        <li><a class="nav-link" href="<?php echo e(route('calificaciones.index')); ?>">Calificaciones</a></li>
+                        <li><a class="nav-link" href="<?php echo e(route('materias.index')); ?>">Materia</a></li>
+                        <?php elseif($user->hasRole('alumno')): ?>
+                        <li><a class="nav-link" href="<?php echo e(route('materias.index')); ?>">Materia</a></li>
+                        <li><a class="nav-link" href="<?php echo e(route('calificaciones.index')); ?>">Calificacion</a></li>
+                        <?php elseif($user->hasRole('secretario')): ?>
+                        <li><a class="nav-link" href="<?php echo e(route('control-materias.index')); ?>">Control Materia</a></li>
+                        <li><a class="nav-link" href="<?php echo e(route('maestros.index')); ?>">Maestro</a></li>
+                        <?php elseif($user->hasRole('clinica')): ?>
+                        <li><a class="nav-link" href="<?php echo e(route('clinicas.index')); ?>">Control Clinica</a></li>
+                        <?php endif; ?>
 
-                            <?php if(Route::has('register')): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('register')); ?>"><?php echo e(__('Register')); ?></a>
-                                </li>
-                            <?php endif; ?>
-                            <?php else: ?>
+
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <?php echo e(Auth::user()->name); ?>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?php echo e(Auth::user()->name); ?> <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <?php echo e(__('Logout')); ?>
 
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        <?php echo e(__('Logout')); ?>
+                                <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                                    <?php echo csrf_field(); ?>
+                                </form>
+                            </div>
+                        </li>
 
-                                    </a>
-
-                                    <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
-                                        <?php echo csrf_field(); ?>
-                                    </form>
-                                </div>
-                            </li>
                         <?php endif; ?>
                     </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <div class="container-fluid h-100 mt-3">
-        <?php echo $__env->yieldContent('content'); ?>
+
+        <main class="py-4">
+            <div class="container">
+            <?php echo $__env->yieldContent('content'); ?>
+            </div>
+        </main>
     </div>
-
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
-<?php /**PATH C:\xampp\htdocs\ProyectoEscolar\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\ProyectoEscolar\resources\views/layouts/app.blade.php ENDPATH**/ ?>

@@ -11,6 +11,13 @@ use Illuminate\Http\Request;
  */
 class MateriaController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:materia-list|materia-create|materia-edit|materia-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:materia-create', ['only' => ['create','store']]);
+         $this->middleware('permission:materia-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:materia-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

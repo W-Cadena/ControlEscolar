@@ -11,6 +11,15 @@ use Illuminate\Http\Request;
  */
 class AlumnoController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('permission:alumno-list|alumno-create|alumno-edit|alumno-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:alumno-create', ['only' => ['create','store']]);
+         $this->middleware('permission:alumno-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:alumno-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

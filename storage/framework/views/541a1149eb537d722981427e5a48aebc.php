@@ -2,11 +2,19 @@
     <div class="box-body">
         
         <div class="form-group">
-            <?php echo e(Form::label('alumno_id')); ?>
+            <?php echo e(Form::label('alumnos')); ?>
 
-            <?php echo e(Form::text('alumno_id', $calificacione->alumno_id, ['class' => 'form-control' . ($errors->has('alumno_id') ? ' is-invalid' : ''), 'placeholder' => 'Alumno Id'])); ?>
+            <?php echo e(Form::select('alumnos', $alumnos, $producto->alumnos_id, ['class' => 'form-control' . ($errors->has('alumnos') ? ' is-invalid' : ''), 'placeholder' => 'Selecciona una categoría'])); ?>
 
-            <?php echo $errors->first('alumno_id', '<div class="invalid-feedback">:message</div>'); ?>
+            <?php echo $errors->first('alumnos', '<div class="invalid-feedback">:message</div>'); ?>
+
+        </div>
+        <div class="form-group">
+            <?php echo e(Form::label('materia')); ?>
+
+            <?php echo e(Form::select('materia', $materias, $producto->materia_id, ['class' => 'form-control' . ($errors->has('materia') ? ' is-invalid' : ''), 'placeholder' => 'Selecciona una categoría'])); ?>
+
+            <?php echo $errors->first('materia', '<div class="invalid-feedback">:message</div>'); ?>
 
         </div>
         <div class="form-group">

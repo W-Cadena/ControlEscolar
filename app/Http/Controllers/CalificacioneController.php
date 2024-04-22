@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calificacione;
+use App\Models\Alumno;
+use App\Models\Materia;
 use Illuminate\Http\Request;
 
 /**
@@ -11,6 +13,13 @@ use Illuminate\Http\Request;
  */
 class CalificacioneController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:calificacion-list|calificacion-create|calificacion-edit|calificacion-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:calificacion-create', ['only' => ['create','store']]);
+         $this->middleware('permission:calificacion-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:calificacion-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,21 +28,13 @@ class CalificacioneController extends Controller
     public function index()
     {
         $calificaciones = Calificacione::paginate();
+        $alumnos = Alumno::all();
+        $materia = Materia::all();
 
-        $rol = Auth::user()->role_id;
-        $rolUsuario = roles::find($rol);
-        $query = ControlMateria::query();
-
-        if ($rolUsuario->name === 'admin') {
-            
-        } elseif ($rolUsuario->name === 'editor') {
-            $query->where('campo', 'valor');
-        }
-
-        return view('calificacione.index', compact('calificaciones'))
+        return view('calificacione.index', compact('calificaciones','alumnos','materia'))
             ->with('i', (request()->input('page', 1) - 1) * $calificaciones->perPage());
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *

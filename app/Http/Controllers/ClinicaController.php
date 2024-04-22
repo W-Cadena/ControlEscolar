@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Storage;
 
 class ClinicaController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('permission:clinica-list|clinica-create|clinica-edit|clinica-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:clinica-create', ['only' => ['create','store']]);
+         $this->middleware('permission:clinica-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:clinica-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
